@@ -11,3 +11,6 @@ Add as a first buildpack in the chain. Set `PROJECT_PATH` environment variable t
 
 # How it works
 The buildpack takes subdirectory you configured, erases everything else, and copies that subdirectory to project root. Then normal Heroku slug compilation proceeds.
+
+# Symlinks
+Symlinks which point outside of the `PROJECT_PATH` will be materialized (replaced with actual files) if env has `MATERIALIZE_SYMLINKS=true`.
