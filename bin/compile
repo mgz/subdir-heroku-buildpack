@@ -16,13 +16,15 @@ if [ -f $ENV_DIR/PROJECT_PATH ]; then
     if [ "$MATERIALIZE_SYMLINKS" == "true" ]; then
       echo "       materializing symlinks"
       for symlink in `find $BUILD_DIR/$PROJECT_PATH -type l`; do
-        target=`readlink -f $symlink`
+        target=`readlink -m $symlink`
+        echo "       symlink is $symlink -> $target"
         if [ -z "$target" ]; then
           echo "       skipping broken symlink $symlink -> $target"
         elif [[ $target == $BUILD_DIR/$PROJECT_PATH* ]]; then
           echo "       skipping symlink, it is inside the project path $symlink -> $target"
         else
-          cp --remove-destination --dereference "$target" "$symlink"
+          rm -rf "$symlink"
+          cp --remove-destination --dereference --recursive "$target" "$symlink"
         fi
       done
     fi
